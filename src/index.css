@@ -4,15 +4,57 @@ body {
   font-family: sans-serif;
 }
 
-.weekdays {
+.month-header {
+  padding: 20px 20px;
+  background: #1abc9c;
+  text-align: center;
+}
+
+.month-text {
+  color: white;
+  font-size: 20px;
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.days-header {
   margin: 0;
   padding: 10px 0;
   background-color: #ddd;
 }
 
-.day {
+.header-item {
   display: inline-block;
   width: 13.6%;
   color: #666;
+  text-align: center;
+}
+
+.days-container {
+  padding: 10px 0;
+  background: #eee;
+  margin: 0;
+}
+
+.single-day {
+  list-style-type: none;
+  display: inline-block;
+  width: 13.6%;
+  text-align: center;
+  margin-bottom: 5px;
+  font-size: 12px;
+  color: #777;
+}
+
+.prev {
+  float: left;
+  padding-top: 5px;
+  text-align: center;
+}
+
+.next {
+  float: right;
+  padding-top: 5px;
   text-align: center;
 }

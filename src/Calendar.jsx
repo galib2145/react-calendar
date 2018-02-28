@@ -3,14 +3,14 @@ import moment from 'moment';
 
 function WeekHeader(props) {
   return ( 
-      <div className="weekdays">
-        <span className="day">Sun</span>
-        <span className="day">Mon</span>
-        <span className="day">Tue</span>
-        <span className="day">Wed</span>
-        <span className="day">Thu</span>
-       	<span className="day">Fri</span>
-       	<span className="day">Sat</span>
+      <div className="days-header">
+        <span className="header-item">Sun</span>
+        <span className="header-item">Mon</span>
+        <span className="header-item">Tue</span>
+        <span className="header-item">Wed</span>
+        <span className="header-item">Thu</span>
+       	<span className="header-item">Fri</span>
+       	<span className="header-item">Sat</span>
     </div>
   );
 }
@@ -56,9 +56,9 @@ function getWeekDataForCalendarView(month, year) {
 
 function Week(props) {
   const weekData = props.weekData;
-  const daysView = weekData.map((date) => <span>{date.getDate()}</span>);
+  const daysView = weekData.map((date) => <span className="single-day">{date.getDate()}</span>);
   return (
-    <div>
+    <div className="days-container">
       {daysView}  
     </div>
   );
@@ -81,25 +81,47 @@ class WeekList extends Component {
 class Calendar extends Component {
   constructor(props) {
     super(props);
-    this.state = {date: moment()};
+    this.state = {
+        date: new Date()
+    };
+
+    this.renderPreviousMonth = this.renderPreviousMonth.bind(this);
+    this.renderNextMonth = this.renderNextMonth.bind(this);
   }
 
-  renderMonthLabel() {
-    return <span>{this.state.date.format("MMMM, YYYY")}</span>;
+  renderPreviousMonth() {
+    const currentDate = this.state.date;
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    this.setState({date: newDate});
   }
 
+  renderNextMonth() {
+    const currentDate = this.state.date;
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    this.setState({date: newDate});
+  }
 
   render() {
+    const currentDate = moment(this.state.date);
     return (
       <div>
         <h1>React Calendar tutorial</h1>
+        <div className="month-header">
+            <div className="prev" onClick={this.renderPreviousMonth}>
+                <span>Prev</span>
+            </div>
+            <span className="month-text">{currentDate.format("MMMM, YYYY")}</span>
+            <div className="next" onClick={this.renderNextMonth}>
+                <span>Next</span>
+            </div>
+        </div>
         <WeekHeader/>
-        <WeekList month='1' year='2018'/>
+        <WeekList month={this.state.date.getMonth()} year={this.state.date.getYear()}/>
       </div>
     );
   }
-
-  
 }
 
 export default Calendar;
