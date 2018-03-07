@@ -3,14 +3,14 @@ import moment from 'moment';
 
 function WeekHeader(props) {
   return ( 
-      <div className="days-header">
-        <span className="header-item">Sun</span>
-        <span className="header-item">Mon</span>
-        <span className="header-item">Tue</span>
-        <span className="header-item">Wed</span>
-        <span className="header-item">Thu</span>
-       	<span className="header-item">Fri</span>
-       	<span className="header-item">Sat</span>
+      <div className="days-container">
+        <span className="week-cell">Sun</span>
+        <span className="week-cell">Mon</span>
+        <span className="week-cell">Tue</span>
+        <span className="week-cell">Wed</span>
+        <span className="week-cell">Thu</span>
+       	<span className="week-cell">Fri</span>
+       	<span className="week-cell">Sat</span>
     </div>
   );
 }
@@ -56,7 +56,7 @@ function getWeekDataForCalendarView(month, year) {
 
 function Week(props) {
   const weekData = props.weekData;
-  const daysView = weekData.map((date) => <span className="single-day">{date.getDate()}</span>);
+  const daysView = weekData.map((date) => <span className="day-cell">{date.getDate()}</span>);
   return (
     <div className="days-container">
       {daysView}  
@@ -106,16 +106,9 @@ class Calendar extends Component {
   render() {
     const currentDate = moment(this.state.date);
     return (
-      <div>
-        <h1>React Calendar tutorial</h1>
-        <div className="month-header">
-            <div className="prev" onClick={this.renderPreviousMonth}>
-                <span>Prev</span>
-            </div>
-            <span className="month-text">{currentDate.format("MMMM, YYYY")}</span>
-            <div className="next" onClick={this.renderNextMonth}>
-                <span>Next</span>
-            </div>
+      <div className="calendar">
+        <div className="month-label">
+          <span className="month-text">{currentDate.format("MMMM, YYYY")}</span>
         </div>
         <WeekHeader/>
         <WeekList month={this.state.date.getMonth()} year={this.state.date.getYear()}/>
@@ -125,3 +118,7 @@ class Calendar extends Component {
 }
 
 export default Calendar;
+
+            // <div className="prev" onClick={this.renderPreviousMonth}>
+            //     <span>Prev</span>
+            // </div>
