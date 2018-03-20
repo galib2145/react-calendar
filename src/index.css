@@ -25,6 +25,11 @@ body {
   text-align: center;
 }
 
+.active {
+  background: #2875c7;
+  color: white;
+}
+
 .month-text {
   height: 40px;
   line-height: 40px !important;

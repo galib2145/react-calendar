@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 
-function WeekHeader(props) {
+import * as timeUtils from './timeUtils';
+
+const WeekHeader = () => {
   return ( 
       <div className="days-container">
         <span className="week-cell">Sun</span>
@@ -54,9 +56,23 @@ function getWeekDataForCalendarView(month, year) {
     return weeks;
 }
 
-function Week(props) {
-  const weekData = props.weekData;
-  const daysView = weekData.map((date) => <span className="day-cell">{date.getDate()}</span>);
+const Day = ({ date, fromCurrentMonth, isSelected, onClick }) => {
+  let dayStyle = 'day-cell';
+  if (!fromCurrentMonth) 
+    dayStyle += ' not-current-month';
+  if (isSelected) 
+    dayStyle += ' active';
+
+  return ( 
+    <span className={dayStyle} onClick={() => onClick(date.getDate())}>
+      {date.getDate()}
+    </span>
+  );
+}
+
+const Week = ({ weekData, onDaySelect }) => {
+  const daysView = weekData.map((date) => 
+    <Day date={date} onClick={onDaySelect}/> );
   return (
     <div className="days-container">
       {daysView}  
@@ -64,61 +80,62 @@ function Week(props) {
   );
 }
 
-class WeekList extends Component {
-    constructor(props) {
-       super(props); 
-    }
-
-    render() {
-      const month = parseInt(this.props.month, 10);
-      const year = parseInt(this.props.year);
-      const weekDataList = getWeekDataForCalendarView(month, year);
-      const weekViewList = weekDataList.map(weekData => <Week weekData={weekData}/>)
-      return weekViewList;
-    }
-}
+const WeekList = ( { month, year, onDaySelect }) => {
+  const weekDataList = getWeekDataForCalendarView(month, year);
+  const weekViewList = weekDataList.map(
+    weekData => <Week weekData={weekData} onDaySelect={onDaySelect}/>
+  )
+  return weekViewList;
+};
 
 class Calendar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        date: new Date()
+      dateConstruct: timeUtils.getDateConstructFromJSDate(new Date()),
     };
 
-    this.renderPreviousMonth = this.renderPreviousMonth.bind(this);
-    this.renderNextMonth = this.renderNextMonth.bind(this);
+    this.onDaySelect = this.onDaySelect.bind(this);
   }
 
-  renderPreviousMonth() {
-    const currentDate = this.state.date;
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    this.setState({date: newDate});
+  onDaySelect(selectedDay) {
+    this.setState({
+      day: selectedDay,
+    });
+
+    console.log(`Selected Day: ${selectedDay}`);
   }
 
-  renderNextMonth() {
-    const currentDate = this.state.date;
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    this.setState({date: newDate});
-  }
+  // renderPreviousMonth() {
+  //   const currentDate = this.state.selectedDate;
+  //   currentDate.setMonth(currentDate.getMonth() - 1);
+  //   const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+  //   this.setState({selectedDate: newDate});
+  // }
+
+  // renderNextMonth() {
+  //   const currentDate = this.state.selectedDate;
+  //   currentDate.setMonth(currentDate.getMonth() + 1);
+  //   const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+  //   this.setState({selectedDate: newDate});
+  // }
 
   render() {
-    const currentDate = moment(this.state.date);
     return (
       <div className="calendar">
         <div className="month-label">
-          <span className="month-text">{currentDate.format("MMMM, YYYY")}</span>
+          <span className="month-text">
+            {timeUtils.getMonthYearStrFromDateConstruct(this.state.dateConstruct)}
+          </span>
         </div>
         <WeekHeader/>
-        <WeekList month={this.state.date.getMonth()} year={this.state.date.getYear()}/>
+        <WeekList 
+          month={this.state.dateConstruct.month} 
+          year={this.state.dateConstruct.year} 
+          onDaySelect={this.onDaySelect}/>
       </div>
     );
   }
 }
 
 export default Calendar;
-
-            // <div className="prev" onClick={this.renderPreviousMonth}>
-            //     <span>Prev</span>
-            // </div>
