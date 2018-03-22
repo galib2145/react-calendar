@@ -64,15 +64,18 @@ const Day = ({ date, fromCurrentMonth, isSelected, onClick }) => {
     dayStyle += ' active';
 
   return ( 
-    <span className={dayStyle} onClick={() => onClick(date.getDate())}>
+    <span className={dayStyle} onClick={() => onClick(date)}>
       {date.getDate()}
     </span>
   );
 }
 
-const Week = ({ weekData, onDaySelect }) => {
-  const daysView = weekData.map((date) => 
-    <Day date={date} onClick={onDaySelect}/> );
+const Week = ({ weekData, onDaySelect, selectedDate }) => {
+  const daysView = weekData.map((date) => {
+    const isSelected = timeUtils.compareDatesWithoutTime(date, selectedDate); 
+    return <Day date={date} onClick={onDaySelect} isSelected={isSelected} />;
+  });
+
   return (
     <div className="days-container">
       {daysView}  
@@ -80,10 +83,14 @@ const Week = ({ weekData, onDaySelect }) => {
   );
 }
 
-const WeekList = ( { month, year, onDaySelect }) => {
+const WeekList = ( { month, year, onDaySelect, selectedDate }) => {
   const weekDataList = getWeekDataForCalendarView(month, year);
   const weekViewList = weekDataList.map(
-    weekData => <Week weekData={weekData} onDaySelect={onDaySelect}/>
+    weekData => 
+      <Week 
+        weekData={weekData} 
+        selectedDate={selectedDate} 
+        onDaySelect={onDaySelect}/>
   )
   return weekViewList;
 };
@@ -91,19 +98,12 @@ const WeekList = ( { month, year, onDaySelect }) => {
 class Calendar extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      dateConstruct: timeUtils.getDateConstructFromJSDate(new Date()),
-    };
-
+    this.state = timeUtils.getDateConstructFromJSDate(new Date());
     this.onDaySelect = this.onDaySelect.bind(this);
   }
 
-  onDaySelect(selectedDay) {
-    this.setState({
-      day: selectedDay,
-    });
-
-    console.log(`Selected Day: ${selectedDay}`);
+  onDaySelect(selectedDate) {
+    this.setState({ selectedDate });
   }
 
   // renderPreviousMonth() {
@@ -125,13 +125,14 @@ class Calendar extends Component {
       <div className="calendar">
         <div className="month-label">
           <span className="month-text">
-            {timeUtils.getMonthYearStrFromDateConstruct(this.state.dateConstruct)}
+            {timeUtils.getMonthYearStrFromDateConstruct(this.state)}
           </span>
         </div>
         <WeekHeader/>
         <WeekList 
-          month={this.state.dateConstruct.month} 
-          year={this.state.dateConstruct.year} 
+          month={this.state.month} 
+          year={this.state.year}
+          selectedDate={this.state.selectedDate} 
           onDaySelect={this.onDaySelect}/>
       </div>
     );

@@ -25,17 +25,13 @@ body {
   text-align: center;
 }
 
-.active {
-  background: #2875c7;
-  color: white;
-}
-
 .month-text {
   height: 40px;
   line-height: 40px !important;
   display: inline-block;
   vertical-align: middle;
 }
+
 .calendar > div.header > i {
   float: left;
   width: 40px;
@@ -62,6 +58,11 @@ body {
   background: white;
   cursor: pointer;
   color: black;
+}
+
+.day-cell.active {
+  background: #2875c7;
+  color: white;
 }
 
 .week-cell {
