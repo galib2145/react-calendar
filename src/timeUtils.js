@@ -18,6 +18,24 @@ const getMonthYearStrFromDateConstruct = (dateConstruct) => {
   return moment(date).format("MMMM, YYYY");
 };
 
+const getNextMonthYear = (month, year) => {
+  const lastDate = new Date(year, month + 1, 0);
+  lastDate.setDate(lastDate.getDate() + 1);
+  return {
+    month: parseInt(lastDate.getMonth(), 10),
+    year:  parseInt(lastDate.getFullYear(), 10),
+  }
+};
+
+const getPrevMonthYear = (month, year) => {
+  const lastDate = new Date(year, month, 1);
+  lastDate.setDate(lastDate.getDate() - 1);
+  return {
+    month: parseInt(lastDate.getMonth(), 10),
+    year:  parseInt(lastDate.getFullYear(), 10),
+  }
+};
+
 const compareDatesWithoutTime = (d1, d2) => {
   if (!d1 || !d2) {
     return false;
@@ -39,4 +57,10 @@ const compareDatesWithoutTime = (d1, d2) => {
   return false;
 }
 
-export { getDateConstructFromJSDate, getMonthYearStrFromDateConstruct, compareDatesWithoutTime };
+export { 
+  getDateConstructFromJSDate, 
+  getMonthYearStrFromDateConstruct, 
+  compareDatesWithoutTime,
+  getNextMonthYear,
+  getPrevMonthYear,
+};

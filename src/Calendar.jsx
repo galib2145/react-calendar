@@ -83,7 +83,7 @@ const Week = ({ weekData, onDaySelect, selectedDate }) => {
   );
 }
 
-const WeekList = ( { month, year, onDaySelect, selectedDate }) => {
+const WeekList = ({ month, year, onDaySelect, selectedDate }) => {
   const weekDataList = getWeekDataForCalendarView(month, year);
   const weekViewList = weekDataList.map(
     weekData => 
@@ -100,25 +100,39 @@ class Calendar extends Component {
     super(props);
     this.state = timeUtils.getDateConstructFromJSDate(new Date());
     this.onDaySelect = this.onDaySelect.bind(this);
+    this.renderNextMonth = this.renderNextMonth.bind(this);
+    this.renderPreviousMonth = this.renderPreviousMonth.bind(this);
   }
 
   onDaySelect(selectedDate) {
     this.setState({ selectedDate });
   }
 
-  // renderPreviousMonth() {
-  //   const currentDate = this.state.selectedDate;
-  //   currentDate.setMonth(currentDate.getMonth() - 1);
-  //   const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-  //   this.setState({selectedDate: newDate});
-  // }
+  renderPreviousMonth() {
+    const prevMonthYear = timeUtils.getPrevMonthYear(
+      this.state.month,
+      this.state.year
+    );
 
-  // renderNextMonth() {
-  //   const currentDate = this.state.selectedDate;
-  //   currentDate.setMonth(currentDate.getMonth() + 1);
-  //   const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-  //   this.setState({selectedDate: newDate});
-  // }
+    this.setState({
+      month: prevMonthYear.month,
+      year: prevMonthYear.year,
+      selectedDate: null,
+    });
+  }
+
+  renderNextMonth() {
+    const nextMonthYear = timeUtils.getNextMonthYear(
+      this.state.month,
+      this.state.year
+    );
+
+    this.setState({
+      month: nextMonthYear.month,
+      year: nextMonthYear.year,
+      selectedDate: null,
+    });
+  }
 
   render() {
     return (
@@ -127,6 +141,8 @@ class Calendar extends Component {
           <span className="month-text">
             {timeUtils.getMonthYearStrFromDateConstruct(this.state)}
           </span>
+          <i className="fa fa-angle-left vc left" onClick={this.renderPreviousMonth}/>
+          <i className="fa fa-angle-right vc right" onClick={this.renderNextMonth}/>
         </div>
         <WeekHeader/>
         <WeekList 

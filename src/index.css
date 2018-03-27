@@ -3,6 +3,23 @@ body {
   font-size: 16px;
 }
 
+.vc {
+    display: inline-block;
+    line-height: 40px;
+}
+
+.left {
+  float: left;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.right {
+  float: right;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
 .calendar {
   float: left;
   display: block;
