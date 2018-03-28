@@ -102,4 +102,9 @@ body {
 
 .days-container {
   border-top: solid 1px #cccccc;
+  border-right: solid 1px #cccccc;
+}
+
+.container {
+  border-bottom: solid 1px #cccccc;
 }
