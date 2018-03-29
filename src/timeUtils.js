@@ -58,26 +58,16 @@ const compareDatesWithoutTime = (d1, d2) => {
 }
 
 const getMonthDurationForCalendarView = (month, year) => {
-  console.log(month + ' ' + year);
-    const firstOfMonth = new Date(year, month, 1);
-    const lastOfMonth = new Date(year, month + 1, 0);
+  const firstOfMonth = new Date(year, month, 1);
+  const lastOfMonth = new Date(year, month + 1, 0);
 
-    // console.log(firstOfMonth);
-    // console.log(lastOfMonth);
+  firstOfMonth.setDate(firstOfMonth.getDate() - firstOfMonth.getDay());
+  lastOfMonth.setDate(lastOfMonth.getDate() + (6 - lastOfMonth.getDay()));
 
-    const startDate = new Date();
-    startDate.setDate(firstOfMonth.getDate() - firstOfMonth.getDay());
-
-    const endDate = new Date();
-    endDate.setDate(lastOfMonth.getDate() + (6 - lastOfMonth.getDay()));
-
-    console.log(startDate);
-    console.log(endDate);
-
-    return {
-        startDate,
-        endDate
-    }
+  return {
+    startDate: firstOfMonth,
+    endDate: lastOfMonth,
+  };
 };
 
 const getWeekDataForCalendarView = (month, year) => {
